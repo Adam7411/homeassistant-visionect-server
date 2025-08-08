@@ -1,4 +1,3 @@
-```yaml
 name: "Visionect Server"
 description: "Visionect Software Suite for e-ink displays like Joan 6"
 version: "1.0.0"
@@ -10,6 +9,12 @@ arch:
   - aarch64
   - amd64
   - i386
+build_from:
+  aarch64: "ghcr.io/home-assistant/aarch64-base:latest"
+  amd64: "ghcr.io/home-assistant/amd64-base:latest"
+  armhf: "ghcr.io/home-assistant/armhf-base:latest"
+  armv7: "ghcr.io/home-assistant/armv7-base:latest"
+  i386: "ghcr.io/home-assistant/i386-base:latest"
 privileged:
   - SYS_ADMIN
   - MKNOD
@@ -33,5 +38,3 @@ schema:
   postgres_password: "str"
   postgres_db: "str"
   server_address: "str"
-image: "ghcr.io/adam7411/visionect-addon-{arch}"
-```
