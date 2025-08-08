@@ -1,6 +1,6 @@
 name: "Visionect Server"
 description: "Visionect Software Suite for e-ink displays"
-version: "1.0.1"
+version: "1.0.2"
 slug: "visionect_server"
 init: false
 arch:
@@ -25,8 +25,8 @@ schema:
   postgres_db: "str"
   server_address: "str"
 ports:
-  8081/tcp: 8081
-  11113/tcp: 11113
+  8082/tcp: 8082
+  11114/tcp: 11114
 privileged:
   - SYS_ADMIN
 devices:
