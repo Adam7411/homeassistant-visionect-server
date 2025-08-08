@@ -1,0 +1,37 @@
+```yaml
+name: "Visionect Server"
+description: "Visionect Software Suite for e-ink displays like Joan 6"
+version: "1.0.0"
+slug: "visionect-server"
+init: false
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+  - i386
+privileged:
+  - SYS_ADMIN
+  - MKNOD
+devices:
+  - "/dev/fuse"
+ports:
+  8081/tcp: 8081
+  11113/tcp: 11113
+  5432/tcp: null
+options:
+  architecture: "auto"
+  visionect_version: "7.6.5"
+  postgres_user: "visionect"
+  postgres_password: "visionect"
+  postgres_db: "koala"
+  server_address: "localhost"
+schema:
+  architecture: "list(auto|arm|x86_64)"
+  visionect_version: "str"
+  postgres_user: "str"
+  postgres_password: "str"
+  postgres_db: "str"
+  server_address: "str"
+image: "ghcr.io/adam7411/visionect-addon-{arch}"
+```
