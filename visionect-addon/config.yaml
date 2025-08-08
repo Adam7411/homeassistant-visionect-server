@@ -25,10 +25,11 @@ schema:
   postgres_db: "str"
   server_address: "str"
 ports:
-  8082/tcp: 8082
+  8083/tcp: 8083
   11114/tcp: 11114
 privileged:
   - SYS_ADMIN
 devices:
   - /dev/fuse
 host_network: false
+
