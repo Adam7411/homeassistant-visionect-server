@@ -1,52 +1,38 @@
-```yaml
-version: "3"
+version: '3.8'
+
 services:
-  vserver3:
-    container_name: vss
-    image: ${VISIONECT_IMAGE}
-    privileged: true
-    ulimits:
-      core: 0
-    depends_on:
-      - redis
-      - postgres_db
-    cap_add:
-      - MKNOD
-      - SYS_ADMIN
-    devices:
-      - "/dev/fuse:/dev/fuse"
-    restart: always
-    links:
-      - "postgres_db:postgres"
-      - "redis:redis"
-    ports:
-      - 8081:8081
-      - 11113:11113
+  postgres:
+    image: postgres:13
     environment:
-      - DB2_1_PORT_5432_TCP_ADDR=postgres
-      - DB2_1_PORT_5432_TCP_USER=${POSTGRES_USER}
-      - DB2_1_PORT_5432_TCP_PASS=${POSTGRES_PASSWORD}
-      - DB2_1_PORT_5432_TCP_DB=${POSTGRES_DB}
-      - REDIS_ADDRESS=redis:6379
-      - VISIONECT_SERVER_ADDRESS=${SERVER_ADDRESS}
-    volumes:
-      - /dev/shm:/dev/shm
-      
-  postgres_db:
-    container_name: pdb
-    image: postgres:latest
-    restart: always
-    ports: 
-      - 5432:5432
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - PGPASSWORD=${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./pgdata:/var/lib/postgresql/data
-      
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+
   redis:
-    image: redis
-    restart: always
-```
+    image: redis:alpine
+    restart: unless-stopped
+
+  visionect-server:
+    image: ${VISIONECT_IMAGE}
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - KOALA_POSTGRES_HOST=postgres
+      - KOALA_POSTGRES_USER=${POSTGRES_USER}
+      - KOALA_POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - KOALA_POSTGRES_DATABASE=${POSTGRES_DB}
+      - KOALA_REDIS_HOST=redis
+      - KOALA_REDIS_PORT=6379
+      - KOALA_SERVER_ADDRESS=${SERVER_ADDRESS}
+    ports:
+      - "8081:8081"
+      - "11113:11113"
+    restart: unless-stopped
+    volumes:
+      - ./visionect-data:/data
