@@ -1,8 +1,7 @@
-```yaml
 name: "Visionect Server"
-description: "Visionect Software Suite for e-ink displays like Joan 6"
-version: "1.0.0"
-slug: "visionect-server"
+description: "Visionect Software Suite for e-ink displays"
+version: "1.0.1"
+slug: "visionect_server"
 init: false
 arch:
   - armhf
@@ -10,15 +9,7 @@ arch:
   - aarch64
   - amd64
   - i386
-privileged:
-  - SYS_ADMIN
-  - MKNOD
-devices:
-  - "/dev/fuse"
-ports:
-  8081/tcp: 8081
-  11113/tcp: 11113
-  5432/tcp: null
+startup: system
 options:
   architecture: "auto"
   visionect_version: "7.6.5"
@@ -33,5 +24,11 @@ schema:
   postgres_password: "str"
   postgres_db: "str"
   server_address: "str"
-image: "ghcr.io/adam7411/visionect-addon-{arch}"
-```
+ports:
+  8081/tcp: 8081
+  11113/tcp: 11113
+privileged:
+  - SYS_ADMIN
+devices:
+  - /dev/fuse
+host_network: false
